@@ -20,4 +20,20 @@ public class Produto extends PanacheEntity {
 
     @UpdateTimestamp
     public LocalDateTime dataAtualizacao;
+
+    @Deprecated
+    public Produto(){}
+
+    public Produto(String nome, BigDecimal valor) {
+        this.nome = nome;
+        this.valor = valor;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
 }
