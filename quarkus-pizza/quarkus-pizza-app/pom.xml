@@ -70,6 +70,12 @@
             <version>1.1.0.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fredsonchaves07</groupId>
+            <artifactId>quarkus-pizza-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

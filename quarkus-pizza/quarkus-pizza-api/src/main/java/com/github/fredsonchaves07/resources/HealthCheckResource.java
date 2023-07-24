@@ -1,5 +1,6 @@
 package com.github.fredsonchaves07.resources;
 
+import com.fredsonchaves07.core.service.PizzaService;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.GET;
@@ -21,6 +22,9 @@ public class HealthCheckResource {
 
     @Inject
     EntityManager entityManager;
+
+    @Inject
+    PizzaService pizzaService;
 
     @GET
     @Produces(APPLICATION_JSON)
