@@ -1,11 +1,12 @@
-package com.github.fredsonchaves07.resources;
+package com.fredsonchaves07.resources;
 
-import com.fredsonchaves07.core.service.PizzaService;
+
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import quarkuscore.core.services.PizzaService;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,8 +24,7 @@ public class HealthCheckResource {
     @Inject
     EntityManager entityManager;
 
-    @Inject
-    PizzaService pizzaService;
+
 
     @GET
     @Produces(APPLICATION_JSON)

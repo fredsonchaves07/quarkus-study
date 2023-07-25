@@ -1,4 +1,4 @@
-package com.github.fredsonchaves07.resources;
+package com.fredsonchaves07.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

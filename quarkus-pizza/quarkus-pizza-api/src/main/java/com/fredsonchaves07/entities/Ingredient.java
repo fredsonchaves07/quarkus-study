@@ -1,4 +1,4 @@
-package com.github.fredsonchaves07.entities;
+package com.fredsonchaves07.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;

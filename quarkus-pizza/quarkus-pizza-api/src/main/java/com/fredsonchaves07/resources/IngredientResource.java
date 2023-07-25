@@ -1,10 +1,8 @@
-package com.github.fredsonchaves07.resources;
+package com.fredsonchaves07.resources;
 
-import com.github.fredsonchaves07.entities.Ingredient;
+import com.fredsonchaves07.entities.Ingredient;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
