@@ -24,7 +24,8 @@ public class HealthCheckResource {
     @Inject
     EntityManager entityManager;
 
-
+    @Inject
+    PizzaService pizzaService;
 
     @GET
     @Produces(APPLICATION_JSON)
@@ -33,6 +34,8 @@ public class HealthCheckResource {
             return Map.of("status", "Error on database connection");
         if (!isEntityHealthy())
             return Map.of("status", "Connection is close");
+        if (!isPizzaServiceHealthy())
+            return Map.of("status", "Error on pizza service");
         return Map.of("status", "Api running");
     }
 
@@ -48,5 +51,14 @@ public class HealthCheckResource {
 
     private boolean isEntityHealthy() {
         return entityManager.isOpen();
+    }
+
+    private boolean isPizzaServiceHealthy() {
+        try {
+            pizzaService.getPizza();
+        } catch (RuntimeException exception) {
+            return false;
+        }
+        return true;
     }
 }
