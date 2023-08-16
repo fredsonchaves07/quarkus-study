@@ -48,6 +48,11 @@ public class ReservationResource {
 
     @POST
     public Reservation make(Reservation reservation) {
-        return repository.save(reservation);
+        Reservation result = repository.save(reservation);
+        String userId = "x";
+        if (reservation.startDay.equals(LocalDate.now())) {
+            rentalClient.start(userId, result.id);
+        }
+        return result;
     }
 }
