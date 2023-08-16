@@ -1,4 +1,4 @@
-package reservation.rest;
+package acme.reservation.rest;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -6,10 +6,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestQuery;
-import reservation.inventory.Car;
-import reservation.inventory.InventoryClient;
-import reservation.reservation.Reservation;
-import reservation.reservation.ReservationRepository;
+import acme.reservation.rental.RentalClient;
+import acme.reservation.inventory.Car;
+import acme.reservation.inventory.InventoryClient;
+import acme.reservation.reservation.Reservation;
+import acme.reservation.reservation.ReservationRepository;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -22,9 +24,12 @@ public class ReservationResource {
 
     private final InventoryClient client;
 
-    public ReservationResource(ReservationRepository repository, InventoryClient client) {
+    private final RentalClient rentalClient;
+
+    public ReservationResource(ReservationRepository repository, InventoryClient client, @RestClient RentalClient rentalClient) {
         this.repository = repository;
         this.client = client;
+        this.rentalClient = rentalClient;
     }
 
     @GET

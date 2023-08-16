@@ -1,4 +1,4 @@
-package reservation.reservation;
+package acme.reservation.reservation;
 
 import jakarta.inject.Singleton;
 

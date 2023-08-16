@@ -1,4 +1,4 @@
-package reservation.reservation;
+package acme.reservation.reservation;
 
 import java.time.LocalDate;
 
