@@ -1,4 +1,4 @@
-package reservation.inventory;
+package acme.reservation.inventory;
 
 import java.util.List;
 
