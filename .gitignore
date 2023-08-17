@@ -71,3 +71,4 @@ nb-configuration.xml
 deploy/*
 *.jks
 *.pem
+*.terraform
