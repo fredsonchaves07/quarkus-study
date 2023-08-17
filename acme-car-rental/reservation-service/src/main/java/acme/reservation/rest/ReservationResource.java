@@ -1,9 +1,6 @@
 package acme.reservation.rest;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestQuery;
 import acme.reservation.rental.RentalClient;
@@ -34,6 +31,8 @@ public class ReservationResource {
 
     @GET
     @Path("availability")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Collection<Car> availability(@RestQuery LocalDate starDate, @RestQuery LocalDate endDate) {
         List<Car> availableCars = client.allCars();
         Map<Long, Car> carsById = new HashMap<>();
@@ -47,6 +46,8 @@ public class ReservationResource {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Reservation make(Reservation reservation) {
         Reservation result = repository.save(reservation);
         String userId = "x";
