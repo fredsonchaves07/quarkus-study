@@ -1,17 +1,21 @@
 package acme.reservation.rest;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import org.jboss.resteasy.reactive.RestQuery;
-import acme.reservation.rental.RentalClient;
 import acme.reservation.inventory.Car;
 import acme.reservation.inventory.InventoryClient;
+import acme.reservation.rental.RentalClient;
 import acme.reservation.reservation.Reservation;
 import acme.reservation.reservation.ReservationRepository;
+import io.smallrye.graphql.client.GraphQLClient;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.RestQuery;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("reservation")
 @Produces(MediaType.APPLICATION_JSON)
@@ -19,13 +23,17 @@ public class ReservationResource {
 
     private final ReservationRepository repository;
 
-    private final InventoryClient client;
+    private final InventoryClient inventoryClient;
 
     private final RentalClient rentalClient;
 
-    public ReservationResource(ReservationRepository repository, InventoryClient client, @RestClient RentalClient rentalClient) {
+    public ReservationResource(
+            ReservationRepository repository,
+            @GraphQLClient("inventory") InventoryClient inventoryClient,
+            @RestClient RentalClient rentalClient
+    ) {
         this.repository = repository;
-        this.client = client;
+        this.inventoryClient = inventoryClient;
         this.rentalClient = rentalClient;
     }
 
@@ -34,7 +42,7 @@ public class ReservationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<Car> availability(@RestQuery LocalDate starDate, @RestQuery LocalDate endDate) {
-        List<Car> availableCars = client.allCars();
+        List<Car> availableCars = inventoryClient.allCars();
         Map<Long, Car> carsById = new HashMap<>();
         for (Car car : availableCars)
             carsById.put(car.getId(), car);
@@ -56,4 +64,6 @@ public class ReservationResource {
         }
         return result;
     }
+
+
 }
