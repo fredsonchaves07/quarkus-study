@@ -1,6 +1,7 @@
 package acme.reservation.rest;
 
 import acme.reservation.inventory.Car;
+import acme.reservation.inventory.GraphQLInventoryClient;
 import acme.reservation.inventory.InventoryClient;
 import acme.reservation.rental.RentalClient;
 import acme.reservation.reservation.Reservation;
@@ -29,7 +30,7 @@ public class ReservationResource {
 
     public ReservationResource(
             ReservationRepository repository,
-            @GraphQLClient("inventory") InventoryClient inventoryClient,
+            @GraphQLClient("inventory") GraphQLInventoryClient inventoryClient,
             @RestClient RentalClient rentalClient
     ) {
         this.repository = repository;
@@ -64,6 +65,4 @@ public class ReservationResource {
         }
         return result;
     }
-
-
 }
