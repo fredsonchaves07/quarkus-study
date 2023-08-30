@@ -7,11 +7,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native -t quarkus/inventory-service .
+# docker build -f src/main/docker/Dockerfile.native -t quarkus/com.fredsonchaves07.acme.inventory-service .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/inventory-service
+# docker run -i --rm -p 8080:8080 quarkus/com.fredsonchaves07.acme.inventory-service
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.6

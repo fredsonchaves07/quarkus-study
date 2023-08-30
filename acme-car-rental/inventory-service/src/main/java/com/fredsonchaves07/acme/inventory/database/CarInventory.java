@@ -1,6 +1,6 @@
-package inventory.database;
+package com.fredsonchaves07.acme.inventory.database;
 
-import inventory.model.Car;
+import com.fredsonchaves07.acme.inventory.model.Car;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 

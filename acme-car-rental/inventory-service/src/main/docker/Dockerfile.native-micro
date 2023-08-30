@@ -10,11 +10,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/inventory-service .
+# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/com.fredsonchaves07.acme.inventory-service .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/inventory-service
+# docker run -i --rm -p 8080:8080 quarkus/com.fredsonchaves07.acme.inventory-service
 #
 ###
 FROM quay.io/quarkus/quarkus-micro-image:2.0

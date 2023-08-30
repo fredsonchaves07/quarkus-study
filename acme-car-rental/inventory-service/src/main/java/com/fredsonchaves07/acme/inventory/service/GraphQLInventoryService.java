@@ -1,7 +1,7 @@
-package inventory.service;
+package com.fredsonchaves07.acme.inventory.service;
 
-import inventory.database.CarInventory;
-import inventory.model.Car;
+import com.fredsonchaves07.acme.inventory.database.CarInventory;
+import com.fredsonchaves07.acme.inventory.model.Car;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Mutation;
