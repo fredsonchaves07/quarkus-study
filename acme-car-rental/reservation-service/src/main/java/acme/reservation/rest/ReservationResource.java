@@ -42,14 +42,14 @@ public class ReservationResource {
     @Path("availability")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Car> availability(@RestQuery LocalDate starDate, @RestQuery LocalDate endDate) {
+    public Collection<Car> availability(@RestQuery LocalDate startDate, @RestQuery LocalDate endDate) {
         List<Car> availableCars = inventoryClient.allCars();
         Map<Long, Car> carsById = new HashMap<>();
         for (Car car : availableCars)
             carsById.put(car.getId(), car);
         List<Reservation> reservations = repository.findAll();
         for (Reservation reservation : reservations)
-            if (reservation.isReserved(starDate, endDate))
+            if (reservation.isReserved(startDate, endDate))
                 carsById.remove(reservation.carId);
         return carsById.values();
     }

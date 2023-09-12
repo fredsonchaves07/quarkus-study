@@ -9,5 +9,5 @@ import java.util.List;
 public interface GraphQLInventoryClient extends InventoryClient {
 
     @Query("cars")
-    public List<Car> allCars();
+    List<Car> allCars();
 }
