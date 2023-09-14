@@ -7,8 +7,10 @@ import acme.reservation.rental.RentalClient;
 import acme.reservation.reservation.Reservation;
 import acme.reservation.reservation.ReservationRepository;
 import io.smallrye.graphql.client.GraphQLClient;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -17,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("reservation")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,6 +30,9 @@ public class ReservationResource {
     private final InventoryClient inventoryClient;
 
     private final RentalClient rentalClient;
+
+    @Inject
+    SecurityContext context;
 
     public ReservationResource(
             ReservationRepository repository,
@@ -56,13 +62,26 @@ public class ReservationResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Reservation make(Reservation reservation) {
+        reservation.userId = context.getUserPrincipal() != null ?
+                context.getUserPrincipal().getName() :
+                "anonymous";
         Reservation result = repository.save(reservation);
-        String userId = "x";
         if (reservation.startDay.equals(LocalDate.now())) {
-            rentalClient.start(userId, result.id);
+            rentalClient.start(reservation.userId, result.id);
         }
         return result;
+    }
+
+    @GET
+    @Path("all")
+    public Collection<Reservation> allReservations() {
+        String userId = context.getUserPrincipal() != null ?
+                context.getUserPrincipal().getName() : null;
+        return repository.findAll()
+                .stream()
+                .filter(reservation -> userId == null ||
+                        userId.equals(reservation.userId))
+                .collect(Collectors.toList());
     }
 }
