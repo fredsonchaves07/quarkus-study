@@ -2,7 +2,7 @@ package acme.reservation;
 
 import acme.reservation.inventory.Car;
 import acme.reservation.inventory.GraphQLInventoryClient;
-import acme.reservation.reservation.Reservation;
+import acme.reservation.reservation.entity.Reservation;
 import acme.reservation.rest.ReservationResource;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;

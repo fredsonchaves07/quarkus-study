@@ -4,10 +4,12 @@ import acme.reservation.inventory.Car;
 import acme.reservation.inventory.GraphQLInventoryClient;
 import acme.reservation.inventory.InventoryClient;
 import acme.reservation.rental.RentalClient;
-import acme.reservation.reservation.Reservation;
+import acme.reservation.reservation.entity.Reservation;
 import acme.reservation.reservation.ReservationRepository;
+import io.quarkus.logging.Log;
 import io.smallrye.graphql.client.GraphQLClient;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.SecurityContext;
@@ -25,8 +27,6 @@ import java.util.stream.Collectors;
 @Produces(MediaType.APPLICATION_JSON)
 public class ReservationResource {
 
-    private final ReservationRepository repository;
-
     private final InventoryClient inventoryClient;
 
     private final RentalClient rentalClient;
@@ -35,11 +35,9 @@ public class ReservationResource {
     SecurityContext context;
 
     public ReservationResource(
-            ReservationRepository repository,
             @GraphQLClient("inventory") GraphQLInventoryClient inventoryClient,
             @RestClient RentalClient rentalClient
     ) {
-        this.repository = repository;
         this.inventoryClient = inventoryClient;
         this.rentalClient = rentalClient;
     }
@@ -53,7 +51,7 @@ public class ReservationResource {
         Map<Long, Car> carsById = new HashMap<>();
         for (Car car : availableCars)
             carsById.put(car.getId(), car);
-        List<Reservation> reservations = repository.findAll();
+        List<Reservation> reservations = Reservation.listAll();
         for (Reservation reservation : reservations)
             if (reservation.isReserved(startDate, endDate))
                 carsById.remove(reservation.carId);
@@ -62,15 +60,17 @@ public class ReservationResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
     public Reservation make(Reservation reservation) {
         reservation.userId = context.getUserPrincipal() != null ?
                 context.getUserPrincipal().getName() :
                 "anonymous";
-        Reservation result = repository.save(reservation);
+        reservation.persist();
+        Log.info("Successfully reserved reservation " + reservation);
         if (reservation.startDay.equals(LocalDate.now())) {
-            rentalClient.start(reservation.userId, result.id);
+            rentalClient.start(reservation.userId, reservation.id);
         }
-        return result;
+        return reservation;
     }
 
     @GET
@@ -78,10 +78,7 @@ public class ReservationResource {
     public Collection<Reservation> allReservations() {
         String userId = context.getUserPrincipal() != null ?
                 context.getUserPrincipal().getName() : null;
-        return repository.findAll()
-                .stream()
-                .filter(reservation -> userId == null ||
-                        userId.equals(reservation.userId))
-                .collect(Collectors.toList());
+        return Reservation.<Reservation>streamAll()
+                .filter(reservation -> userId == null || userId.equals(reservation.userId)).toList();
     }
 }

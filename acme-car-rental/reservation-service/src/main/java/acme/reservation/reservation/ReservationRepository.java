@@ -1,5 +1,7 @@
 package acme.reservation.reservation;
 
+import acme.reservation.reservation.entity.Reservation;
+
 import java.util.List;
 
 public interface ReservationRepository {
