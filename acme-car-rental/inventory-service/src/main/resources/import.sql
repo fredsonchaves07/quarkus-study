@@ -1,0 +1,2 @@
+INSERT INTO Car (id, licensePlateNumber, manufacturer, model) VALUES (100 , "ABC123", "Mazda", "6");
+INSERT INTO Car (id, licensePlateNumber, manufacturer, model)  VALUES (200, "XYZ987", "Ford", "Mustang");
