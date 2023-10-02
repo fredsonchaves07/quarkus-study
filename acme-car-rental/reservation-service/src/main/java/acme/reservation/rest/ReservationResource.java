@@ -5,11 +5,11 @@ import acme.reservation.inventory.GraphQLInventoryClient;
 import acme.reservation.inventory.InventoryClient;
 import acme.reservation.rental.RentalClient;
 import acme.reservation.reservation.entity.Reservation;
-import acme.reservation.reservation.ReservationRepository;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.smallrye.graphql.client.GraphQLClient;
+import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.SecurityContext;
@@ -28,57 +28,74 @@ import java.util.stream.Collectors;
 public class ReservationResource {
 
     private final InventoryClient inventoryClient;
-
     private final RentalClient rentalClient;
 
     @Inject
     SecurityContext context;
 
     public ReservationResource(
-            @GraphQLClient("inventory") GraphQLInventoryClient inventoryClient,
-            @RestClient RentalClient rentalClient
-    ) {
+            @GraphQLClient("inventory")
+            GraphQLInventoryClient inventoryClient,
+            @RestClient RentalClient rentalClient) {
         this.inventoryClient = inventoryClient;
         this.rentalClient = rentalClient;
     }
 
-    @GET
-    @Path("availability")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Car> availability(@RestQuery LocalDate startDate, @RestQuery LocalDate endDate) {
-        List<Car> availableCars = inventoryClient.allCars();
-        Map<Long, Car> carsById = new HashMap<>();
-        for (Car car : availableCars)
-            carsById.put(car.getId(), car);
-        List<Reservation> reservations = Reservation.listAll();
-        for (Reservation reservation : reservations)
-            if (reservation.isReserved(startDate, endDate))
-                carsById.remove(reservation.carId);
-        return carsById.values();
-    }
-
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Reservation make(Reservation reservation) {
+    @WithTransaction
+    public Uni<Reservation> make(Reservation reservation) {
         reservation.userId = context.getUserPrincipal() != null ?
-                context.getUserPrincipal().getName() :
-                "anonymous";
-        reservation.persist();
-        Log.info("Successfully reserved reservation " + reservation);
-        if (reservation.startDay.equals(LocalDate.now())) {
-            rentalClient.start(reservation.userId, reservation.id);
-        }
-        return reservation;
+                context.getUserPrincipal().getName() : "anonymous";
+        return reservation.<Reservation>persist().onItem()
+                .call(persistedReservation -> {
+                    Log.info("Successfully reserved reservation " + persistedReservation);
+                    if (persistedReservation.startDay.equals(LocalDate.now())) {
+                        return rentalClient.start(persistedReservation.userId,
+                                        persistedReservation.id)
+                                .onItem().invoke(rental ->
+                                        Log.info("Successfully started rental " + rental))
+                                .replaceWith(persistedReservation);
+
+                    }
+                    return Uni.createFrom().item(persistedReservation);
+                });
     }
 
     @GET
     @Path("all")
-    public Collection<Reservation> allReservations() {
+    public Uni<List<Reservation>> allReservations() {
         String userId = context.getUserPrincipal() != null ?
                 context.getUserPrincipal().getName() : null;
-        return Reservation.<Reservation>streamAll()
-                .filter(reservation -> userId == null || userId.equals(reservation.userId)).toList();
+        return Reservation.<Reservation>listAll()
+                .onItem().transform(reservations -> reservations.stream()
+                        .filter(reservation -> userId == null ||
+                                userId.equals(reservation.userId))
+                        .collect(Collectors.toList()));
+    }
+
+    @GET
+    @Path("availability")
+    public Uni<Collection<Car>> availability(@RestQuery LocalDate startDate,
+                                             @RestQuery LocalDate endDate) {
+        // obtain all cars from inventory
+        List<Car> availableCars = inventoryClient.allCars();
+        // create a map from id to car
+        Map<Long, Car> carsById = new HashMap<>();
+        for (Car car : availableCars) {
+            carsById.put(car.getId(), car);
+        }
+
+        // get all current reservations
+        return Reservation.<Reservation>listAll()
+                .onItem().transform(reservations -> {
+                    // for each reservation, remove the car from the map
+                    for (Reservation reservation : reservations) {
+                        if (reservation.isReserved(startDate, endDate)) {
+                            carsById.remove(reservation.carId);
+                        }
+                    }
+                    return carsById.values();
+                });
     }
 }
