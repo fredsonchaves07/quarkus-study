@@ -11,6 +11,7 @@ import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.smallrye.mutiny.Uni;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,6 +19,7 @@ import org.mockito.Mockito;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
@@ -37,7 +39,8 @@ public class ReservationResourceTest {
         GraphQLInventoryClient mock = Mockito.mock(GraphQLInventoryClient.class);
         Car peugeot = new Car(1L, "ABC 123", "Peugeot", "406");
         Mockito.when(mock.allCars())
-                .thenReturn(Collections.singletonList(peugeot));
+                .thenReturn(Uni.createFrom()
+                        .item(List.of(peugeot)));
         QuarkusMock.installMockForType(mock,
                 GraphQLInventoryClient.class);
     }

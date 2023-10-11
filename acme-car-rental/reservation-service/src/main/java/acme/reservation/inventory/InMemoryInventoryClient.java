@@ -1,5 +1,6 @@
 package acme.reservation.inventory;
 
+import io.smallrye.mutiny.Uni;
 import jakarta.inject.Singleton;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class InMemoryInventoryClient implements InventoryClient {
     );
 
     @Override
-    public List<Car> allCars() {
-        return ALL_CARS;
+    public Uni<List<Car>> allCars() {
+        Car peugeot = new Car(1L, "ABC 123", "Peugeot", "406");
+        return Uni.createFrom().item(List.of(peugeot));
     }
 }

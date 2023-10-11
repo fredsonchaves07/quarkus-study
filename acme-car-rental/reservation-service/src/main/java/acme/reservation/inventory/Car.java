@@ -2,13 +2,13 @@ package acme.reservation.inventory;
 
 public class Car {
 
-    private Long id;
+    public Long id;
 
-    private String licensePlateNumber;
+    public String licensePlateNumber;
 
-    private String manufacturer;
+    public String manufacturer;
 
-    private String model;
+    public String model;
 
     public Car() {}
 

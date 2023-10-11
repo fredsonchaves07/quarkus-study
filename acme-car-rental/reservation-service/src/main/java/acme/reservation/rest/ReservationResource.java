@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("reservation")
@@ -79,23 +80,23 @@ public class ReservationResource {
     public Uni<Collection<Car>> availability(@RestQuery LocalDate startDate,
                                              @RestQuery LocalDate endDate) {
         // obtain all cars from inventory
-        List<Car> availableCars = inventoryClient.allCars();
-        // create a map from id to car
-        Map<Long, Car> carsById = new HashMap<>();
-        for (Car car : availableCars) {
-            carsById.put(car.getId(), car);
-        }
-
-        // get all current reservations
-        return Reservation.<Reservation>listAll()
-                .onItem().transform(reservations -> {
-                    // for each reservation, remove the car from the map
+        Uni<Map<Long, Car>> carsUni = inventoryClient.allCars()
+                .map(cars -> cars.stream().collect(Collectors
+                        .toMap(car -> car.id, Function.identity())));
+        Uni<List<Reservation>> reservationsUni = Reservation.listAll();
+        return Uni.combine().all()
+                .unis(carsUni, reservationsUni)
+                .asTuple()
+                .chain(tuple -> {
+                    Map<Long, Car> carsById = tuple.getItem1();
+                    List<Reservation> reservations = tuple.getItem2();
+// for each reservation, remove the car from the map
                     for (Reservation reservation : reservations) {
                         if (reservation.isReserved(startDate, endDate)) {
                             carsById.remove(reservation.carId);
                         }
                     }
-                    return carsById.values();
+                    return Uni.createFrom().item(carsById.values());
                 });
     }
 }
