@@ -15,3 +15,7 @@ module "networking" {
   source = "./networking"
   aws_region = var.aws_region
 }
+
+module "secrets" {
+  source = "./secrets"
+}
