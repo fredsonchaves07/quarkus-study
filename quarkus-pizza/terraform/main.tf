@@ -19,3 +19,10 @@ module "networking" {
 module "secrets" {
   source = "./secrets"
 }
+
+module "database" {
+  source = "./database"
+  depends_on = [ module.networking, module.secrets ]
+  vpc_id = module.networking.vpc_id
+  subnet_ids = module.networking.private_subnet_ids
+}
