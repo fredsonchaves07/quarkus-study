@@ -6,11 +6,11 @@ import entities.question.QuestionID;
 
 public class Answer extends Entity<AnswerID> {
 
-    private final String content;
+    private String content;
 
-    private Identifier authorId;
+    private final Identifier authorId;
 
-    private QuestionID questionId;
+    private final QuestionID questionId;
 
     private Answer(String content, Identifier authorId, QuestionID questionId) {
         super(new AnswerID());
@@ -36,5 +36,14 @@ public class Answer extends Entity<AnswerID> {
 
     public String content() {
         return content;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+        super.setUpdatedAt();
+    }
+
+    public String excerpt() {
+        return this.content.substring(0, 120).trim().concat("...");
     }
 }

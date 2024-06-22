@@ -5,6 +5,9 @@ import core.entities.Identifier;
 import entities.answer.AnswerID;
 import entities.valueobjects.Slug;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 public class Question extends Entity<QuestionID> {
 
     private String title;
@@ -41,5 +44,29 @@ public class Question extends Entity<QuestionID> {
 
     public static Question createQuestion(QuestionID id, Slug slug, String title, String content, Identifier authorId, AnswerID bestAnswerId) {
         return new Question(id, title, slug, content, authorId, bestAnswerId);
+    }
+
+    public boolean isNew() {
+        return super.createdAt().until(LocalDateTime.now(), ChronoUnit.DAYS) <= 3;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+        this.slug = Slug.createFromText(title);
+        super.setUpdatedAt();
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+        super.setUpdatedAt();
+    }
+
+    public void updateBestAnwserId(AnswerID answerID) {
+        this.bestAnswerId = answerID;
+        super.setUpdatedAt();
+    }
+
+    public String excerpt() {
+        return this.content.substring(0, 120).trim().concat("...");
     }
 }
