@@ -1,6 +1,6 @@
 package factories.repositories;
 
-import entities.Answer;
+import entities.answer.Answer;
 import repositories.AnswersRepository;
 
 public class FakeAnswersRepository implements AnswersRepository {

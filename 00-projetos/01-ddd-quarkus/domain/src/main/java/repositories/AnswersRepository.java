@@ -1,6 +1,6 @@
 package repositories;
 
-import entities.Answer;
+import entities.answer.Answer;
 
 public interface AnswersRepository {
 

@@ -3,6 +3,9 @@ package useCases;
 import factories.repositories.FakeAnswersRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import usecases.answerquestion.AnswerQuestionInput;
+import usecases.answerquestion.AnswerQuestionOutput;
+import usecases.answerquestion.AnswerQuestionUseCase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

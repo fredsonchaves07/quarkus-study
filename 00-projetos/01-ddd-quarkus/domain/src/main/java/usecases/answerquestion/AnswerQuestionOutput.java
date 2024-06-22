@@ -1,6 +1,6 @@
-package useCases;
+package usecases.answerquestion;
 
-import entities.Answer;
+import entities.answer.Answer;
 
 public record AnswerQuestionOutput(String content) {
 

@@ -1,11 +1,14 @@
-package useCases;
+package usecases.answerquestion;
 
-import entities.Answer;
+import core.usecases.UseCase;
+import entities.answer.Answer;
+import entities.instructor.InstructorID;
+import entities.question.QuestionID;
 import repositories.AnswersRepository;
 
 import java.util.Objects;
 
-public class AnswerQuestionUseCase {
+public class AnswerQuestionUseCase implements UseCase<AnswerQuestionInput, AnswerQuestionOutput> {
 
     private final AnswersRepository repository;
 
@@ -17,7 +20,7 @@ public class AnswerQuestionUseCase {
         String questionId = answerQuestionInput.questionId();
         String instructorId = answerQuestionInput.instructorId();
         String content = answerQuestionInput.content();
-        Answer answer = Answer.createAnswer(content, instructorId, questionId);
+        Answer answer = Answer.createAnswer(content, new InstructorID(instructorId), new QuestionID(questionId));
         repository.create(answer);
         return AnswerQuestionOutput.from(answer);
     }
