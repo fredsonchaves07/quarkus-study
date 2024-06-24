@@ -1,5 +1,7 @@
-package github.fredsonchaves07.domain.forum.repositories.memorydb;
+package github.fredsonchaves07.db.repositories.forum;
 
+import github.fredsonchaves07.db.DB;
+import github.fredsonchaves07.db.MemoryDB;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
 import github.fredsonchaves07.domain.forum.entities.answer.AnswerID;
 import github.fredsonchaves07.domain.forum.repositories.AnswersRepository;
@@ -9,8 +11,10 @@ import java.util.Optional;
 
 public class FakeAnswersRepository implements AnswersRepository {
 
-    private FakeAnswersRepository() {
+    private final DB<Answer> db;
 
+    private FakeAnswersRepository() {
+        db = MemoryDB.createDB();
     }
 
     @Override
@@ -20,7 +24,7 @@ public class FakeAnswersRepository implements AnswersRepository {
 
     @Override
     public void create(Answer answer) {
-
+        db.push(answer);
     }
 
     @Override

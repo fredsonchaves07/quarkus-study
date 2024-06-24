@@ -1,6 +1,6 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
-import github.fredsonchaves07.domain.forum.repositories.memorydb.FakeQuestionsRepository;
+import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionInput;
 import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionOutput;
 import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionUseCase;
@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateQuestionUseCaseTest {
 
-    static FakeQuestionsRepository repository;
+    private static CreateQuestionUseCase useCase;
 
     @BeforeAll
     static void setup() {
-        repository = FakeQuestionsRepository.createRepository();
+        FakeQuestionsRepository repository = FakeQuestionsRepository.createRepository();
+        useCase = new CreateQuestionUseCase(repository);
     }
 
     @Test
     public void createAQuestion() {
-        CreateQuestionUseCase useCase = new CreateQuestionUseCase(repository);
         CreateQuestionInput input = new CreateQuestionInput(
                 "1", "Nova pergunta", "Conteúdo da perguta"
         );
