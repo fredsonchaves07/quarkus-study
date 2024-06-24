@@ -1,8 +1,8 @@
 package github.fredsonchaves07.domain.forum.entities.question;
 
 import github.fredsonchaves07.core.entities.Entity;
-import github.fredsonchaves07.core.entities.Identifier;
 import github.fredsonchaves07.domain.forum.entities.answer.AnswerID;
+import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.valueobjects.Slug;
 
 import java.time.LocalDateTime;
@@ -16,11 +16,11 @@ public class Question extends Entity<QuestionID> {
 
     private AnswerID bestAnswerId;
 
-    private Identifier authorId;
+    private AuthorID authorId;
 
     private Slug slug;
 
-    private Question(String title, Slug slug, String content, Identifier authorId, AnswerID bestAnswerId) {
+    private Question(String title, Slug slug, String content, AuthorID authorId, AnswerID bestAnswerId) {
         super(new QuestionID());
         this.title = title;
         this.slug = slug;
@@ -29,7 +29,7 @@ public class Question extends Entity<QuestionID> {
         this.bestAnswerId = bestAnswerId;
     }
 
-    private Question(QuestionID id, String title, Slug slug, String content, Identifier authorId,  AnswerID bestAnswerId) {
+    private Question(QuestionID id, String title, Slug slug, String content, AuthorID authorId,  AnswerID bestAnswerId) {
         super(id);
         this.title = title;
         this.slug = slug;
@@ -38,12 +38,24 @@ public class Question extends Entity<QuestionID> {
         this.bestAnswerId = bestAnswerId;
     }
 
-    public static Question createQuestion(String title, Slug slug, String content, Identifier authorId, AnswerID bestAnswerId) {
+    private Question(AuthorID authorID, String title, String content) {
+        super(new QuestionID());
+        this.title = title;
+        this.slug = Slug.createFromText(title);
+        this.content = content;
+        this.authorId = authorID;
+    }
+
+    public static Question createQuestion(String title, Slug slug, String content, AuthorID authorId, AnswerID bestAnswerId) {
         return new Question(title, slug, content, authorId, bestAnswerId);
     }
 
-    public static Question createQuestion(QuestionID id, Slug slug, String title, String content, Identifier authorId, AnswerID bestAnswerId) {
+    public static Question createQuestion(QuestionID id, Slug slug, String title, String content, AuthorID authorId, AnswerID bestAnswerId) {
         return new Question(id, title, slug, content, authorId, bestAnswerId);
+    }
+
+    public static Question createQuestion(AuthorID authorID, String title, String content) {
+        return new Question(authorID, title, content);
     }
 
     public boolean isNew() {

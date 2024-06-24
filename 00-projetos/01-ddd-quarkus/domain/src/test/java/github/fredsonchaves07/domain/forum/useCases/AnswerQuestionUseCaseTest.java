@@ -1,6 +1,6 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
-import github.fredsonchaves07.domain.forum.repositories.FakeAnswersRepository;
+import github.fredsonchaves07.domain.forum.repositories.memorydb.FakeAnswersRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import github.fredsonchaves07.domain.forum.usecases.answerquestion.AnswerQuestionInput;

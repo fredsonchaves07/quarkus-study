@@ -2,15 +2,15 @@ package github.fredsonchaves07.core.entities;
 
 import java.time.LocalDateTime;
 
-public abstract class Entity<I extends Identifier> {
+public abstract class Entity<ID extends Identifier> {
 
-    private final I id;
+    private final ID id;
 
     private final LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public Entity(I id) {
+    protected Entity(ID id) {
         this.id = id;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

@@ -2,7 +2,7 @@ package github.fredsonchaves07.domain.forum.usecases.answerquestion;
 
 import github.fredsonchaves07.core.usecases.UseCase;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
-import github.fredsonchaves07.domain.forum.entities.instructor.InstructorID;
+import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 import github.fredsonchaves07.domain.forum.repositories.AnswersRepository;
 
@@ -20,7 +20,7 @@ public class AnswerQuestionUseCase implements UseCase<AnswerQuestionInput, Answe
         String questionId = answerQuestionInput.questionId();
         String instructorId = answerQuestionInput.instructorId();
         String content = answerQuestionInput.content();
-        Answer answer = Answer.createAnswer(content, new InstructorID(instructorId), new QuestionID(questionId));
+        Answer answer = Answer.createAnswer(content, new AuthorID(instructorId), new QuestionID(questionId));
         repository.create(answer);
         return AnswerQuestionOutput.from(answer);
     }
