@@ -8,5 +8,5 @@ public interface DB<T> {
 
     List<T> listAll();
 
-    void drop();
+    void delete(T value);
 }

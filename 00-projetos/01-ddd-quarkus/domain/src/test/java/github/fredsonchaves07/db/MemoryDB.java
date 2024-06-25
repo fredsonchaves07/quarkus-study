@@ -25,9 +25,8 @@ public class MemoryDB<T> implements DB<T> {
         return new ArrayList<>(values);
     }
 
-
     @Override
-    public void drop() {
-
+    public void delete(T value) {
+        values.remove(value);
     }
 }

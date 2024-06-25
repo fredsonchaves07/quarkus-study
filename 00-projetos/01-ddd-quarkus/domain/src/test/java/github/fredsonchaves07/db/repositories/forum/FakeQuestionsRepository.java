@@ -34,7 +34,7 @@ public class FakeQuestionsRepository implements QuestionRepository {
 
     @Override
     public Optional<Question> findById(QuestionID id) {
-        return Optional.empty();
+        return findAll().stream().filter(question -> question.id().equals(id.value())).findFirst();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FakeQuestionsRepository implements QuestionRepository {
 
     @Override
     public void delete(Question entity) {
-
+        db.delete(entity);
     }
 
     @Override
