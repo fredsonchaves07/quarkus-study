@@ -29,12 +29,12 @@ public class FakeAnswersRepository implements AnswersRepository {
 
     @Override
     public Optional<Answer> findById(AnswerID id) {
-        return Optional.empty();
+        return findAll().stream().filter(answer -> answer.id().equals(id.value())).findFirst();
     }
 
     @Override
     public List<Answer> findAll() {
-        return List.of();
+        return db.listAll();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FakeAnswersRepository implements AnswersRepository {
 
     @Override
     public void delete(Answer entity) {
-
+        db.delete(entity);
     }
 
     public static FakeAnswersRepository createRepository() {

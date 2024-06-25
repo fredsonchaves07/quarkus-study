@@ -2,35 +2,36 @@ package github.fredsonchaves07.domain.forum.entities.answer;
 
 import github.fredsonchaves07.core.entities.Entity;
 import github.fredsonchaves07.core.entities.Identifier;
+import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 
 public class Answer extends Entity<AnswerID> {
 
     private String content;
 
-    private final Identifier authorId;
+    private final AuthorID authorId;
 
     private final QuestionID questionId;
 
-    private Answer(String content, Identifier authorId, QuestionID questionId) {
+    private Answer(String content, AuthorID authorId, QuestionID questionId) {
         super(new AnswerID());
         this.content = content;
         this.authorId = authorId;
         this.questionId = questionId;
     }
 
-    private Answer(AnswerID id, String content, Identifier authorId, QuestionID questionId) {
+    private Answer(AnswerID id, String content, AuthorID authorId, QuestionID questionId) {
         super(id);
         this.content = content;
         this.authorId = authorId;
         this.questionId = questionId;
     }
 
-    public static Answer createAnswer(String content, Identifier authorId, QuestionID questionId) {
+    public static Answer createAnswer(String content, AuthorID authorId, QuestionID questionId) {
         return new Answer(content, authorId, questionId);
     }
 
-    public static Answer createAnswer(AnswerID id, String content, Identifier authorId, QuestionID questionId) {
+    public static Answer createAnswer(AnswerID id, String content, AuthorID authorId, QuestionID questionId) {
         return new Answer(id, content, authorId, questionId);
     }
 
@@ -45,5 +46,9 @@ public class Answer extends Entity<AnswerID> {
 
     public String excerpt() {
         return this.content.substring(0, 120).trim().concat("...");
+    }
+
+    public AuthorID authorId() {
+        return authorId;
     }
 }
