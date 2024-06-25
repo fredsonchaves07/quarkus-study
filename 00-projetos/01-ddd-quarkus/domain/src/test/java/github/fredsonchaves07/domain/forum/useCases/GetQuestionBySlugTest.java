@@ -27,7 +27,7 @@ public class GetQuestionBySlugTest {
 
     @Test
     public void getQuestionBySlug() {
-        GetQuestionBySlugInput input = new GetQuestionBySlugInput("nova-pergunta");
+        GetQuestionBySlugInput input = new GetQuestionBySlugInput(newQuestion.slug().value());
         GetQuestionBySlugOutput output = getQuestionBySlugUseCase.execute(input);
         assertNotNull(newQuestion.id(), output.questionId());
         assertEquals(newQuestion.title(), output.title());

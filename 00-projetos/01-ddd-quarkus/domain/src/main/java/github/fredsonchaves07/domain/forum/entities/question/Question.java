@@ -46,6 +46,14 @@ public class Question extends Entity<QuestionID> {
         this.authorId = authorID;
     }
 
+    private Question(QuestionID id, AuthorID authorID, String title, String content) {
+        super(id);
+        this.title = title;
+        this.slug = Slug.createFromText(title);
+        this.content = content;
+        this.authorId = authorID;
+    }
+
     public static Question createQuestion(String title, Slug slug, String content, AuthorID authorId, AnswerID bestAnswerId) {
         return new Question(title, slug, content, authorId, bestAnswerId);
     }
@@ -56,6 +64,10 @@ public class Question extends Entity<QuestionID> {
 
     public static Question createQuestion(AuthorID authorID, String title, String content) {
         return new Question(authorID, title, content);
+    }
+
+    public static Question createQuestion(QuestionID id, AuthorID authorID, String title, String content) {
+        return new Question(id, authorID, title, content);
     }
 
     public boolean isNew() {

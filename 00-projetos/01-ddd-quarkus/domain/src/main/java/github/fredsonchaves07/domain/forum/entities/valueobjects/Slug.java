@@ -9,8 +9,11 @@ public record Slug(String value) {
         String slugText = Normalizer
                 .normalize(Objects.requireNonNull(value), Normalizer.Form.NFD)
                 .toLowerCase()
-                .trim()
-                .replaceAll(" ", "-");
+                .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "")
+                .replaceAll("[^a-z0-9\\s-]", "")
+                .replaceAll(" ", "-")
+                .replaceAll("^-|-$", "")
+                .replaceAll("-{2,}", "-");
         return new Slug(slugText);
     }
 
