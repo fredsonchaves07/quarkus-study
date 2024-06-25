@@ -109,4 +109,12 @@ public class Question extends Entity<QuestionID> {
     public Slug slug() {
         return slug;
     }
+
+    public void title(String title) {
+        if (title != null) this.title = title;
+    }
+
+    public void content(String content) {
+        if (content != null) this.content = content;
+    }
 }

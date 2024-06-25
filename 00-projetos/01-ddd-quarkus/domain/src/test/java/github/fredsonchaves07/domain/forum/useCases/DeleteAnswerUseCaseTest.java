@@ -26,13 +26,13 @@ public class DeleteAnswerUseCaseTest {
     }
 
     @Test
-    public void shouldBeDeleteQuestion() {
+    public void shouldBeDeleteAnswer() {
         DeleteAnswerInput input = new DeleteAnswerInput(answer.authorId().toString(), answer.id());
         assertDoesNotThrow(() -> useCase.execute(input));
     }
 
     @Test
-    public void shouldNotBeAbleToDeleteAQuestionFromAnotherUser() {
+    public void shouldNotBeAbleToDeleteAAnswerFromAnotherUser() {
         DeleteAnswerInput input = new DeleteAnswerInput("123", answer.id());
         assertThrows(Error.class, () -> useCase.execute(input));
     }

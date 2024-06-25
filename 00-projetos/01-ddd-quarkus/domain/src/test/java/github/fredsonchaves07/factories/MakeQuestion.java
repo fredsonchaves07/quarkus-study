@@ -24,4 +24,12 @@ public class MakeQuestion {
     public static Question makeQuestion(QuestionID questionID, String authorId, String title, String content) {
         return Question.createQuestion(questionID, new AuthorID(authorId), title, content);
     }
+
+    public static String makeTitleQuestion() {
+        return faker.lorem().sentence();
+    }
+
+    public static String makeContentQuestion() {
+        return faker.lorem().characters();
+    }
 }

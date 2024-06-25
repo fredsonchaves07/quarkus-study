@@ -26,6 +26,14 @@ public class MemoryDB<T> implements DB<T> {
     }
 
     @Override
+    public void replace(T oldValue, T newValue) {
+        if (values.contains(oldValue)) {
+            values.remove(oldValue);
+            values.add(newValue);
+        }
+    }
+
+    @Override
     public void delete(T value) {
         values.remove(value);
     }

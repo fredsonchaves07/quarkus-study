@@ -8,5 +8,7 @@ public interface DB<T> {
 
     List<T> listAll();
 
+    void replace(T oldValue, T newValue);
+
     void delete(T value);
 }

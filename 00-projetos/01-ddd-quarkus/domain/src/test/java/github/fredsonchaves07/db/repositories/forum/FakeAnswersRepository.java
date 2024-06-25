@@ -39,7 +39,8 @@ public class FakeAnswersRepository implements AnswersRepository {
 
     @Override
     public void update(Answer entity) {
-
+        Answer answer = findById(new AnswerID(entity.id())).get();
+        db.replace(answer, entity);
     }
 
     @Override
