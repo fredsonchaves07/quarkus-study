@@ -4,6 +4,7 @@ import github.fredsonchaves07.db.DB;
 import github.fredsonchaves07.db.MemoryDB;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
+import github.fredsonchaves07.domain.forum.entities.valueobjects.Slug;
 import github.fredsonchaves07.domain.forum.repositories.QuestionRepository;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class FakeQuestionsRepository implements QuestionRepository {
 
     @Override
     public List<Question> findAll() {
-        return List.of();
+        return db.listAll();
     }
 
     @Override
@@ -49,5 +50,10 @@ public class FakeQuestionsRepository implements QuestionRepository {
     @Override
     public void delete(Question entity) {
 
+    }
+
+    @Override
+    public Optional<Question> findBySlug(Slug slug) {
+        return findAll().stream().filter(question -> question.slug().equals(slug)).findFirst();
     }
 }

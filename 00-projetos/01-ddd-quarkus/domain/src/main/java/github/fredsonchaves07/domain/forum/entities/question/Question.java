@@ -81,4 +81,20 @@ public class Question extends Entity<QuestionID> {
     public String excerpt() {
         return this.content.substring(0, 120).trim().concat("...");
     }
+
+    public AuthorID authorId() {
+        return authorId;
+    }
+
+    public String title() {
+        return title;
+    }
+
+    public String content() {
+        return content;
+    }
+
+    public Slug slug() {
+        return slug;
+    }
 }

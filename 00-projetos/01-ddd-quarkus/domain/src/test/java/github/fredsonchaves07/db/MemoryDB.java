@@ -21,6 +21,12 @@ public class MemoryDB<T> implements DB<T> {
     }
 
     @Override
+    public List<T> listAll() {
+        return new ArrayList<>(values);
+    }
+
+
+    @Override
     public void drop() {
 
     }

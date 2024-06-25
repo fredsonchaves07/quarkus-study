@@ -14,6 +14,10 @@ public record Slug(String value) {
         return new Slug(slugText);
     }
 
+    public static Slug createFromSlug(String slug) {
+        return new Slug(slug);
+    }
+
     @Override
     public String toString() {
         return value;
