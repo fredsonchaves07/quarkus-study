@@ -20,6 +20,14 @@ public class MakeAnswer {
         );
     }
 
+    public static Answer makeAnswer(Question question) {
+        return Answer.createAnswer(
+                faker.lorem().characters(),
+                question.authorId(),
+                new QuestionID(question.id())
+        );
+    }
+
 //    public static Answer makeQuestion(String authorId, String title, String content) {
 //        return Answer.createAnswer(new AuthorID(authorId), title, content);
 //    }

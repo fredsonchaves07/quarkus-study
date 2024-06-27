@@ -55,4 +55,8 @@ public class Answer extends Entity<AnswerID> {
     public AuthorID authorId() {
         return authorId;
     }
+
+    public QuestionID questionId() {
+        return questionId;
+    }
 }
