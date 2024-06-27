@@ -27,4 +27,8 @@ public class MakeAnswer {
 //    public static Answer makeQuestion(QuestionID questionID, String authorId, String title, String content) {
 //        return Answer.createAnswer(questionID, new AuthorID(authorId), title, content);
 //    }
+
+    public static String makeContentAnswer() {
+        return faker.lorem().characters();
+    }
 }

@@ -39,6 +39,10 @@ public class Answer extends Entity<AnswerID> {
         return content;
     }
 
+    public void content(String content) {
+        this.content = content;
+    }
+
     public void updateContent(String content) {
         this.content = content;
         super.setUpdatedAt();
