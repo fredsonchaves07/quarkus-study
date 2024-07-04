@@ -3,10 +3,14 @@ package github.fredsonchaves07.domain.forum.entities.question;
 import github.fredsonchaves07.core.entities.Entity;
 import github.fredsonchaves07.domain.forum.entities.answer.AnswerID;
 import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
+import github.fredsonchaves07.domain.forum.entities.comment.Comment;
+import github.fredsonchaves07.domain.forum.entities.comment.CommentID;
 import github.fredsonchaves07.domain.forum.entities.valueobjects.Slug;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Question extends Entity<QuestionID> {
 
@@ -19,6 +23,8 @@ public class Question extends Entity<QuestionID> {
     private AuthorID authorId;
 
     private Slug slug;
+
+    private final List<CommentID> comments = new ArrayList<>();
 
     private Question(String title, Slug slug, String content, AuthorID authorId, AnswerID bestAnswerId) {
         super(new QuestionID());
@@ -116,5 +122,14 @@ public class Question extends Entity<QuestionID> {
 
     public void content(String content) {
         if (content != null) this.content = content;
+    }
+
+    public Question addComment(CommentID commentID) {
+        this.comments.add(commentID);
+        return this;
+    }
+
+    public List<CommentID> comments() {
+        return new ArrayList<>(this.comments);
     }
 }

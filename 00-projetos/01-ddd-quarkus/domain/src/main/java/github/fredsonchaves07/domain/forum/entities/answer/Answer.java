@@ -5,6 +5,8 @@ import github.fredsonchaves07.core.entities.Identifier;
 import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 
+import java.util.List;
+
 public class Answer extends Entity<AnswerID> {
 
     private String content;
