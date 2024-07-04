@@ -1,15 +1,10 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
 import github.fredsonchaves07.db.repositories.forum.FakeAnswersRepository;
-import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
-import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 import github.fredsonchaves07.domain.forum.usecases.fetchquestionanswers.FetchQuestionsAnswersInput;
 import github.fredsonchaves07.domain.forum.usecases.fetchquestionanswers.FetchQuestionsAnswersOutput;
 import github.fredsonchaves07.domain.forum.usecases.fetchquestionanswers.FetchQuestionsAnswersUseCase;
-import github.fredsonchaves07.domain.forum.usecases.fetchrecentquestions.FetchRecentQuestionsInput;
-import github.fredsonchaves07.domain.forum.usecases.fetchrecentquestions.FetchRecentQuestionsOutput;
-import github.fredsonchaves07.domain.forum.usecases.fetchrecentquestions.FetchRecentQuestionsUseCase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
