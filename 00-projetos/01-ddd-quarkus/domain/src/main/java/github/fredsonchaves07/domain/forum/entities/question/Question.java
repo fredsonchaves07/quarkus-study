@@ -129,6 +129,11 @@ public class Question extends Entity<QuestionID> {
         return this;
     }
 
+    public Question removeComment(CommentID commentID) {
+        this.comments.remove(commentID);
+        return this;
+    }
+
     public List<CommentID> comments() {
         return new ArrayList<>(this.comments);
     }

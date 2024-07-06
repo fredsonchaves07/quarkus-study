@@ -1,14 +1,12 @@
 package github.fredsonchaves07.factories;
 
 import com.github.javafaker.Faker;
-import github.fredsonchaves07.domain.forum.entities.answer.Answer;
 import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.comment.Comment;
+import github.fredsonchaves07.domain.forum.entities.comment.CommentID;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
-import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 
 import java.util.Locale;
-import java.util.UUID;
 
 public class MakeComment {
 

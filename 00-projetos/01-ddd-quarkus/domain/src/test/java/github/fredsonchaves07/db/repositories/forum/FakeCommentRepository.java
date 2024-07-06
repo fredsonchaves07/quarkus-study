@@ -33,12 +33,12 @@ public class FakeCommentRepository implements CommentRepository {
 
     @Override
     public Optional<Comment> findById(CommentID id) {
-        return Optional.empty();
+        return findAll().stream().filter(comment -> comment.id().equals(id.value())).findFirst();
     }
 
     @Override
     public List<Comment> findAll() {
-        return List.of();
+        return db.listAll();
     }
 
     @Override
@@ -48,6 +48,6 @@ public class FakeCommentRepository implements CommentRepository {
 
     @Override
     public void delete(Comment entity) {
-
+        db.delete(entity);
     }
 }
