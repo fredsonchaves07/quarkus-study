@@ -3,8 +3,10 @@ package github.fredsonchaves07.domain.forum.entities.answer;
 import github.fredsonchaves07.core.entities.Entity;
 import github.fredsonchaves07.core.entities.Identifier;
 import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
+import github.fredsonchaves07.domain.forum.entities.comment.CommentID;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Answer extends Entity<AnswerID> {
@@ -14,6 +16,8 @@ public class Answer extends Entity<AnswerID> {
     private final AuthorID authorId;
 
     private final QuestionID questionId;
+
+    private List<CommentID> comments = new ArrayList<>();
 
     private Answer(String content, AuthorID authorId, QuestionID questionId) {
         super(new AnswerID());
@@ -60,5 +64,14 @@ public class Answer extends Entity<AnswerID> {
 
     public QuestionID questionId() {
         return questionId;
+    }
+
+    public Answer addComment(CommentID commentID) {
+        this.comments.add(commentID);
+        return this;
+    }
+
+    public List<CommentID> comments() {
+        return new ArrayList<>(this.comments);
     }
 }
