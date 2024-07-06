@@ -1,5 +1,6 @@
 package github.fredsonchaves07.domain.forum.usecases.deletecommentonanswer;
 
+import github.fredsonchaves07.core.errors.Either;
 import github.fredsonchaves07.core.usecases.InputUseCase;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
 import github.fredsonchaves07.domain.forum.entities.answer.AnswerID;
@@ -14,6 +15,7 @@ import github.fredsonchaves07.domain.forum.repositories.QuestionRepository;
 import github.fredsonchaves07.domain.forum.usecases.deletecommentonquestion.DeleteCommentOnQuestionInput;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class DeleteCommentOnAnswerUseCase implements InputUseCase<DeleteCommentOnAnswerInput> {
 
@@ -28,9 +30,11 @@ public class DeleteCommentOnAnswerUseCase implements InputUseCase<DeleteCommentO
 
     @Override
     public void execute(DeleteCommentOnAnswerInput input) {
-        Answer answer = answersRepository
-                .findById(new AnswerID(input.answerId()))
-                .orElseThrow(() -> new Error("Answer not found"));
+        Optional<Answer> answer = answersRepository
+                .findById(new AnswerID(input.answerId()));
+        if (answer.isEmpty())
+            return Either.failure("Answer not found");
+
         Comment comment = commentRepository
                 .findById(new CommentID(input.commentId())).
                 orElseThrow(() -> new Error("Comment Not Found"));
