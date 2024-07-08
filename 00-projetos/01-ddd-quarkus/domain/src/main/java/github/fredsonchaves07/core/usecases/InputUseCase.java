@@ -1,6 +1,10 @@
 package github.fredsonchaves07.core.usecases;
 
-public interface InputUseCase<IN> {
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 
-    void execute(IN input);
+public interface InputUseCase<IN extends ValueObject, C> {
+
+    Either<C, T> execute(IN input);
 }
