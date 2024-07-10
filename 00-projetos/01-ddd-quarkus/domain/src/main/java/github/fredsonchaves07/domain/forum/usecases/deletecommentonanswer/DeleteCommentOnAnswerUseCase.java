@@ -2,6 +2,7 @@ package github.fredsonchaves07.domain.forum.usecases.deletecommentonanswer;
 
 import github.fredsonchaves07.core.errors.Either;
 import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.usecases.SingleUseCase;
 import github.fredsonchaves07.core.usecases.UseCase;
 import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
@@ -18,7 +19,7 @@ import github.fredsonchaves07.domain.forum.repositories.CommentRepository;
 import java.util.Objects;
 import java.util.Optional;
 
-public class DeleteCommentOnAnswerUseCase implements UseCase<DeleteCommentOnAnswerInput> {
+public class DeleteCommentOnAnswerUseCase implements SingleUseCase<DeleteCommentOnAnswerInput> {
 
     private final AnswersRepository answersRepository;
 
@@ -31,18 +32,16 @@ public class DeleteCommentOnAnswerUseCase implements UseCase<DeleteCommentOnAnsw
 
     @Override
     public Either<Error, ValueObject> execute(DeleteCommentOnAnswerInput input) {
-        Optional<Answer> answer = answersRepository
-                .findById(new AnswerID(input.answerId()));
+        Optional<Answer> answer = answersRepository.findById(new AnswerID(input.answerId()));
         if (answer.isEmpty())
             return Either.error(AnswerNotFoundError.trows());
-        Optional<Comment> comment = commentRepository
-                .findById(new CommentID(input.commentId()));
+        Optional<Comment> comment = commentRepository.findById(new CommentID(input.commentId()));
         if (comment.isEmpty())
             return Either.error(CommentNotFoundError.trows());
         if (!comment.get().authorID().equals(new AuthorID(input.authorId())))
             return Either.error(NotAllowedError.trows());
         answer.get().removeComment(new CommentID(comment.get().id()));
         commentRepository.delete(comment.get());
-        return Either.success(null);
+        return Either.success();
     }
 }

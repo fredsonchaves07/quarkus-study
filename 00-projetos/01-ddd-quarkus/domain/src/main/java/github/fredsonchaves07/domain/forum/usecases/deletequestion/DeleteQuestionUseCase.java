@@ -1,17 +1,19 @@
 package github.fredsonchaves07.domain.forum.usecases.deletequestion;
 
-import github.fredsonchaves07.core.usecases.InputUseCase;
-import github.fredsonchaves07.core.usecases.UseCase;
-import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.usecases.SingleUseCase;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
+import github.fredsonchaves07.domain.forum.errors.NotAllowedError;
+import github.fredsonchaves07.domain.forum.errors.QuestionNotFoundError;
 import github.fredsonchaves07.domain.forum.repositories.QuestionRepository;
-import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionInput;
-import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionOutput;
 
 import java.util.Objects;
+import java.util.Optional;
 
-public class DeleteQuestionUseCase implements InputUseCase<DeleteQuestionInput> {
+public class DeleteQuestionUseCase implements SingleUseCase<DeleteQuestionInput> {
 
     private final QuestionRepository repository;
 
@@ -20,12 +22,13 @@ public class DeleteQuestionUseCase implements InputUseCase<DeleteQuestionInput> 
     }
 
     @Override
-    public void execute(DeleteQuestionInput input) {
-        Question question = repository
-                .findById(new QuestionID(input.questionId()))
-                .orElseThrow(() -> new Error("Question not found"));
-        if (!question.authorId().toString().equals(input.authorId()))
-            throw new Error("Not allowed");
-        repository.delete(question);
+    public Either<Error, ValueObject> execute(DeleteQuestionInput input) {
+        Optional<Question> question = repository.findById(new QuestionID(input.questionId()));
+        if (question.isEmpty())
+            return Either.error(QuestionNotFoundError.trows());
+        if (!question.get().authorId().toString().equals(input.authorId()))
+            return Either.error(NotAllowedError.trows());
+        repository.delete(question.get());
+        return Either.success();
     }
 }

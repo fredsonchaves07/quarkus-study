@@ -2,6 +2,8 @@ package github.fredsonchaves07.core.errors;
 
 import github.fredsonchaves07.core.valueObject.ValueObject;
 
+import java.util.Optional;
+
 public abstract class Either<E extends  Error, S extends ValueObject> {
 
     private Either() {
@@ -12,25 +14,30 @@ public abstract class Either<E extends  Error, S extends ValueObject> {
 
     public abstract boolean isSuccess();
 
-    public abstract E getError();
+    public abstract Optional<E> getError();
 
-    public abstract S getSuccess();
+    public abstract Optional<S> getSuccess();
 
-    public static <E extends github.fredsonchaves07.core.errors.Error,
-            S extends ValueObject> Either<E, S> error(E value) {
-        return new Error<>(value);
+    public static <E extends Error, S extends ValueObject> Either<E, S> error(E value) {
+        return new EitherError<>(value);
     }
 
-    public static <E extends github.fredsonchaves07.core.errors.Error,
-            S extends ValueObject> Either<E, S> success(S value) {
+    public static <E extends Error, S extends ValueObject> Either<E, S> error() {
+        return new EitherError<>(null);
+    }
+
+    public static <E extends Error, S extends ValueObject> Either<E, S> success(S value) {
         return new Success<>(value);
     }
 
-    private static class Error<E extends github.fredsonchaves07.core.errors.Error,
-            S extends ValueObject> extends Either<E, S> {
+    public static <E extends Error, S extends ValueObject> Either<E, S> success() {
+        return new Success<>(null);
+    }
+
+    private static class EitherError<E extends Error, S extends ValueObject> extends Either<E, S> {
         private final E value;
 
-        private Error(E value) {
+        private EitherError(E value) {
             this.value = value;
         }
 
@@ -45,18 +52,17 @@ public abstract class Either<E extends  Error, S extends ValueObject> {
         }
 
         @Override
-        public E getError() {
-            return value;
+        public Optional<E> getError() {
+            return Optional.of(value);
         }
 
         @Override
-        public S getSuccess() {
-            return null;
+        public Optional<S> getSuccess() {
+            return Optional.empty();
         }
     }
 
-    private static class Success<E extends github.fredsonchaves07.core.errors.Error,
-            S extends ValueObject> extends Either<E, S> {
+    private static class Success<E extends Error, S extends ValueObject> extends Either<E, S> {
         private final S value;
 
         private Success(S value) {
@@ -74,13 +80,13 @@ public abstract class Either<E extends  Error, S extends ValueObject> {
         }
 
         @Override
-        public S getSuccess() {
-            throw new UnsupportedOperationException("getLeft() called on a Right value");
+        public Optional<S> getSuccess() {
+            return Optional.of(value);
         }
 
         @Override
-        public E getError() {
-            return null;
+        public Optional<E> getError() {
+            return Optional.empty();
         }
     }
 }

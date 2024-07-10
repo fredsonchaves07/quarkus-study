@@ -10,7 +10,7 @@ public class QuestionNotFoundError extends Error {
         super(ERROR_MESSAGE);
     }
 
-    private static QuestionNotFoundError trows() {
+    public static QuestionNotFoundError trows() {
         return new QuestionNotFoundError();
     }
 }

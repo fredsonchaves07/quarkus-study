@@ -1,16 +1,19 @@
 package github.fredsonchaves07.domain.forum.usecases.editanswer;
 
-import github.fredsonchaves07.core.usecases.InputUseCase;
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.usecases.SingleUseCase;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
 import github.fredsonchaves07.domain.forum.entities.answer.AnswerID;
-import github.fredsonchaves07.domain.forum.entities.question.Question;
-import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
+import github.fredsonchaves07.domain.forum.errors.AnswerNotFoundError;
+import github.fredsonchaves07.domain.forum.errors.NotAllowedError;
 import github.fredsonchaves07.domain.forum.repositories.AnswersRepository;
-import github.fredsonchaves07.domain.forum.repositories.QuestionRepository;
 
 import java.util.Objects;
+import java.util.Optional;
 
-public class EditAnswerUseCase implements InputUseCase<EditAnswerInput> {
+public class EditAnswerUseCase implements SingleUseCase<EditAnswerInput> {
 
     private final AnswersRepository repository;
 
@@ -19,13 +22,14 @@ public class EditAnswerUseCase implements InputUseCase<EditAnswerInput> {
     }
 
     @Override
-    public void execute(EditAnswerInput input) {
-        Answer answer = repository
-                .findById(new AnswerID(input.answerId()))
-                .orElseThrow(() -> new Error("Question not found"));
-        if (!answer.authorId().toString().equals(input.authorId()))
-            throw new Error("Not allowed");
-        answer.content(input.content());
-        repository.update(answer);
+    public Either<Error, ValueObject> execute(EditAnswerInput input) {
+        Optional<Answer> answer = repository.findById(new AnswerID(input.answerId()));
+        if (answer.isEmpty())
+            return Either.error(AnswerNotFoundError.trows());
+        if (!answer.get().authorId().toString().equals(input.authorId()))
+            return Either.error(NotAllowedError.trows());
+        answer.get().content(input.content());
+        repository.update(answer.get());
+        return Either.success();
     }
 }

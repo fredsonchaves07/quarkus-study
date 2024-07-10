@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.usecases.createquestion;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.core.usecases.UseCase;
 import github.fredsonchaves07.domain.forum.entities.author.AuthorID;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
@@ -16,12 +18,12 @@ public class CreateQuestionUseCase implements UseCase<CreateQuestionInput, Creat
     }
 
     @Override
-    public CreateQuestionOutput execute(CreateQuestionInput input) {
+    public Either<Error, CreateQuestionOutput> execute(CreateQuestionInput input) {
         String content = input.content();
         String authorId = input.authorId();
         String title = input.title();
         Question question = Question.createQuestion(new AuthorID(authorId), title, content);
         repository.create(question);
-        return new CreateQuestionOutput(question.id(), authorId, title, content);
+        return Either.success(new CreateQuestionOutput(question.id(), authorId, title, content));
     }
 }

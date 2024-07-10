@@ -4,7 +4,7 @@ import github.fredsonchaves07.core.errors.Either;
 import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.core.valueObject.ValueObject;
 
-public interface InputUseCase<IN extends ValueObject, C> {
+public interface SingleUseCase<IN extends ValueObject> {
 
-    Either<C, T> execute(IN input);
+    Either<Error, ValueObject> execute(IN input);
 }
