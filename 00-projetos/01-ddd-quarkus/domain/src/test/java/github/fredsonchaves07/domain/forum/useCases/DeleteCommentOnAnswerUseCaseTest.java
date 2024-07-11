@@ -1,5 +1,8 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.db.repositories.forum.FakeAnswersRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeCommentRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
@@ -20,8 +23,7 @@ import org.junit.jupiter.api.Test;
 import static github.fredsonchaves07.factories.MakeAnswer.makeAnswer;
 import static github.fredsonchaves07.factories.MakeComment.makeComment;
 import static github.fredsonchaves07.factories.MakeQuestion.makeQuestion;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeleteCommentOnAnswerUseCaseTest {
 
@@ -46,7 +48,8 @@ public class DeleteCommentOnAnswerUseCaseTest {
         DeleteCommentOnAnswerInput input = new DeleteCommentOnAnswerInput(
                 comment.authorID().toString(), comment.id(), answer.id()
         );
-        assertDoesNotThrow(() -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isSuccess());
     }
 
     @Test
@@ -54,6 +57,7 @@ public class DeleteCommentOnAnswerUseCaseTest {
         DeleteCommentOnAnswerInput input = new DeleteCommentOnAnswerInput(
                 comment.authorID().toString(), comment.id(), "123"
         );
-        assertThrows(Error.class, () -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isError());
     }
 }

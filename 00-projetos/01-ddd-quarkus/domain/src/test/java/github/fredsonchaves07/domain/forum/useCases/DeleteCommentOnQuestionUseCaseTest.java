@@ -1,5 +1,8 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.db.repositories.forum.FakeCommentRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.entities.comment.Comment;
@@ -42,7 +45,8 @@ public class DeleteCommentOnQuestionUseCaseTest {
         DeleteCommentOnQuestionInput input = new DeleteCommentOnQuestionInput(
                 comment.authorID().toString(), comment.id(), question.id()
         );
-        assertDoesNotThrow(() -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isSuccess());
     }
 
     @Test
@@ -50,6 +54,7 @@ public class DeleteCommentOnQuestionUseCaseTest {
         DeleteCommentOnQuestionInput input = new DeleteCommentOnQuestionInput(
                 comment.authorID().toString(), comment.id(), "123"
         );
-        assertThrows(Error.class, () -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isError());
     }
 }

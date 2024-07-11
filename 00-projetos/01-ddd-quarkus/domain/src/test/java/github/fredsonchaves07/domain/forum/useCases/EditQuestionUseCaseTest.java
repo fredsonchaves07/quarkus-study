@@ -1,5 +1,8 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
+import github.fredsonchaves07.core.valueObject.ValueObject;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.repositories.QuestionRepository;
@@ -33,7 +36,8 @@ public class EditQuestionUseCaseTest {
                 question.id(),
                 makeTitleQuestion(),
                 makeContentQuestion());
-        assertDoesNotThrow(() -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isSuccess());
     }
 
     @Test
@@ -43,6 +47,7 @@ public class EditQuestionUseCaseTest {
                 question.id(),
                 makeTitleQuestion(),
                 makeContentQuestion());
-        assertThrows(Error.class, () -> useCase.execute(input));
+        Either<Error, ValueObject> output = useCase.execute(input);
+        assertTrue(output.isError());
     }
 }

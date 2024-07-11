@@ -40,6 +40,6 @@ public class DeleteCommentOnQuestionUseCase implements SingleUseCase<DeleteComme
             return Either.error(CommentNotFoundError.trows());
         question.get().removeComment(new CommentID(comment.get().id()));
         commentRepository.delete(comment.get());
-        return null;
+        return Either.success(null);
     }
 }

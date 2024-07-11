@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.db.repositories.forum.FakeAnswersRepository;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.usecases.fetchquestionanswers.FetchQuestionsAnswersInput;
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static github.fredsonchaves07.factories.MakeAnswer.makeAnswer;
 import static github.fredsonchaves07.factories.MakeQuestion.makeQuestion;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FetchQuestionsAnswersUseCaseTest {
 
@@ -31,7 +33,9 @@ public class FetchQuestionsAnswersUseCaseTest {
     @Test
     public void shouldBeAbleFetchQuestionsAnswers() {
         FetchQuestionsAnswersInput input = new FetchQuestionsAnswersInput(question.id(), 1);
-        FetchQuestionsAnswersOutput output = useCase.execute(input);
-        assertEquals(3, output.questions().size());
+        Either<Error, FetchQuestionsAnswersOutput> output = useCase.execute(input);
+        assertEquals(3, output.getSuccess().get().questions().size());
+        assertTrue(output.isSuccess());
+        assertFalse(output.isError());
     }
 }

@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.db.repositories.forum.FakeAnswersRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeCommentRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
@@ -43,10 +45,12 @@ public class CommentOnAnswerUseCaseTest {
         CommentOnAnswerInput input = new CommentOnAnswerInput(
                 makeCommentAuthorId().toString(), answer.id(), makeCommentContent()
         );
-        CommentOnAnswerOutput output = useCase.execute(input);
-        assertEquals(input.authorId(), output.authorId());
-        assertEquals(input.content(), output.content());
+        Either<Error, CommentOnAnswerOutput> output = useCase.execute(input);
+        assertEquals(input.authorId(), output.getSuccess().get().authorId());
+        assertEquals(input.content(), output.getSuccess().get().content());
         assertFalse(answer.comments().isEmpty());
+        assertTrue(output.isSuccess());
+        assertFalse(output.isError());
     }
 
     @Test
@@ -54,6 +58,9 @@ public class CommentOnAnswerUseCaseTest {
         CommentOnAnswerInput input = new CommentOnAnswerInput(
                 makeCommentAuthorId().toString(), "123", makeCommentContent()
         );
-        assertThrows(Error.class, () -> useCase.execute(input));
+        Either<Error, CommentOnAnswerOutput> output = useCase.execute(input);
+        assertTrue(output.isError());
+        assertFalse(output.isSuccess());
+        assertTrue(output.getError().isPresent());
     }
 }

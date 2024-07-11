@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionInput;
 import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestionOutput;
@@ -7,8 +9,8 @@ import github.fredsonchaves07.domain.forum.usecases.createquestion.CreateQuestio
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CreateQuestionUseCaseTest {
 
@@ -25,10 +27,12 @@ public class CreateQuestionUseCaseTest {
         CreateQuestionInput input = new CreateQuestionInput(
                 "1", "Nova pergunta", "Conteúdo da perguta"
         );
-        CreateQuestionOutput output = useCase.execute(input);
-        assertNotNull(output.questionId());
-        assertEquals(input.title(), output.title());
-        assertEquals(input.authorId(), output.authorId());
-        assertEquals(input.content(), output.content());
+        Either<Error, CreateQuestionOutput> output = useCase.execute(input);
+        assertNotNull(output.getSuccess().get().questionId());
+        assertEquals(input.title(), output.getSuccess().get().title());
+        assertEquals(input.authorId(), output.getSuccess().get().authorId());
+        assertEquals(input.content(), output.getSuccess().get().content());
+        assertTrue(output.isSuccess());
+        assertFalse(output.isError());
     }
 }

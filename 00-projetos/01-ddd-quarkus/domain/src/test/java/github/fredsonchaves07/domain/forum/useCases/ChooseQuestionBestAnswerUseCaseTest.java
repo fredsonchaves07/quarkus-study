@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.db.repositories.forum.FakeAnswersRepository;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.entities.answer.Answer;
@@ -40,11 +42,13 @@ public class ChooseQuestionBestAnswerUseCaseTest {
         ChooseQuestionBestAnswerInput input = new ChooseQuestionBestAnswerInput(
                 answer.id(), answer.authorId().toString()
         );
-        ChooseQuestionBestAnswerOutput output = useCase.execute(input);
-        assertEquals(question.id(), output.questionId());
-        assertEquals(question.authorId().toString(), output.authorId());
-        assertEquals(question.title(), output.title());
-        assertEquals(question.content(), output.content());
+        Either<Error, ChooseQuestionBestAnswerOutput> output = useCase.execute(input);
+        assertEquals(question.id(), output.getSuccess().get().questionId());
+        assertEquals(question.authorId().toString(), output.getSuccess().get().authorId());
+        assertEquals(question.title(), output.getSuccess().get().title());
+        assertEquals(question.content(), output.getSuccess().get().content());
+        assertTrue(output.isSuccess());
+        assertFalse(output.isError());
     }
 
     @Test
@@ -52,6 +56,9 @@ public class ChooseQuestionBestAnswerUseCaseTest {
         ChooseQuestionBestAnswerInput input = new ChooseQuestionBestAnswerInput(
                 answer.id(), "123"
         );
-        assertThrows(Error.class, () -> useCase.execute(input));
+        Either<Error, ChooseQuestionBestAnswerOutput> output = useCase.execute(input);
+        assertTrue(output.isError());
+        assertFalse(output.isSuccess());
+        assertTrue(output.getError().isPresent());
     }
 }

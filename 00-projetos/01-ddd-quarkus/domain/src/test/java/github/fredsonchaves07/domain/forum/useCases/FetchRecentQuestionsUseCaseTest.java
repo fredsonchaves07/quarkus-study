@@ -1,5 +1,7 @@
 package github.fredsonchaves07.domain.forum.useCases;
 
+import github.fredsonchaves07.core.errors.Either;
+import github.fredsonchaves07.core.errors.Error;
 import github.fredsonchaves07.db.repositories.forum.FakeQuestionsRepository;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.usecases.fetchrecentquestions.FetchRecentQuestionsInput;
@@ -12,8 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static github.fredsonchaves07.factories.MakeQuestion.makeQuestion;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FetchRecentQuestionsUseCaseTest {
 
@@ -37,19 +38,21 @@ public class FetchRecentQuestionsUseCaseTest {
     @Test
     public void shouldBeAbleFetchRecentQuestions() {
         FetchRecentQuestionsInput input = new FetchRecentQuestionsInput(1);
-        FetchRecentQuestionsOutput output = useCase.execute(input);
-        assertEquals(3, output.questions().size());
-        assertEquals(question3.id(), output.questions().get(0).questionId());
-        assertEquals(question3.authorId().toString(), output.questions().get(0).authorId());
-        assertEquals(question3.title(), output.questions().get(0).title());
-        assertEquals(question3.content(), output.questions().get(0).content());
-        assertEquals(question2.id(), output.questions().get(1).questionId());
-        assertEquals(question2.authorId().toString(), output.questions().get(1).authorId());
-        assertEquals(question2.title(), output.questions().get(1).title());
-        assertEquals(question2.content(), output.questions().get(1).content());
-        assertEquals(question1.id(), output.questions().get(2).questionId());
-        assertEquals(question1.authorId().toString(), output.questions().get(2).authorId());
-        assertEquals(question1.title(), output.questions().get(2).title());
-        assertEquals(question1.content(), output.questions().get(2).content());
+        Either<Error, FetchRecentQuestionsOutput> output = useCase.execute(input);
+        assertTrue(output.isSuccess());
+        assertFalse(output.isError());
+        assertEquals(3, output.getSuccess().get().questions().size());
+        assertEquals(question3.id(), output.getSuccess().get().questions().get(0).questionId());
+        assertEquals(question3.authorId().toString(), output.getSuccess().get().questions().get(0).authorId());
+        assertEquals(question3.title(), output.getSuccess().get().questions().get(0).title());
+        assertEquals(question3.content(), output.getSuccess().get().questions().get(0).content());
+        assertEquals(question2.id(), output.getSuccess().get().questions().get(1).questionId());
+        assertEquals(question2.authorId().toString(), output.getSuccess().get().questions().get(1).authorId());
+        assertEquals(question2.title(), output.getSuccess().get().questions().get(1).title());
+        assertEquals(question2.content(), output.getSuccess().get().questions().get(1).content());
+        assertEquals(question1.id(), output.getSuccess().get().questions().get(2).questionId());
+        assertEquals(question1.authorId().toString(), output.getSuccess().get().questions().get(2).authorId());
+        assertEquals(question1.title(), output.getSuccess().get().questions().get(2).title());
+        assertEquals(question1.content(), output.getSuccess().get().questions().get(2).content());
     }
 }
