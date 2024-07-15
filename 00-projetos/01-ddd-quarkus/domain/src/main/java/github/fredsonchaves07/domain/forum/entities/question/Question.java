@@ -26,7 +26,7 @@ public class Question extends AggregateRoot<QuestionID> {
 
     private final List<CommentID> comments = new ArrayList<>();
 
-    private final List<QuestionAttachment> attachments = new ArrayList<>();
+    private final QuestionAttachmentList attachments = new QuestionAttachmentList(new ArrayList<>());
 
     private Question(String title, Slug slug, String content, AuthorID authorId, AnswerID bestAnswerId) {
         super(new QuestionID());
@@ -140,8 +140,8 @@ public class Question extends AggregateRoot<QuestionID> {
         return new ArrayList<>(this.comments);
     }
 
-    public List<QuestionAttachment> attachments() {
-        return new ArrayList<>(this.attachments);
+    public QuestionAttachmentList attachments() {
+        return attachments;
     }
 
     public Question addAttachment(QuestionAttachment attachment) {

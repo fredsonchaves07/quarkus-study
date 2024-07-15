@@ -3,6 +3,7 @@ package github.fredsonchaves07.db.repositories.forum;
 import github.fredsonchaves07.core.pagination.Pagination;
 import github.fredsonchaves07.db.DB;
 import github.fredsonchaves07.db.MemoryDB;
+import github.fredsonchaves07.domain.forum.entities.attachment.QuestionAttachment;
 import github.fredsonchaves07.domain.forum.entities.question.Question;
 import github.fredsonchaves07.domain.forum.entities.question.QuestionID;
 import github.fredsonchaves07.domain.forum.entities.valueobjects.Slug;
@@ -68,6 +69,16 @@ public class FakeQuestionsRepository implements QuestionRepository {
                 .sorted(new QuestionRecentComparator())
                 .toList()
                 .subList(initialPage * 20, finishPage);
+    }
+
+    @Override
+    public List<QuestionAttachment> findQuestionAttachmentByQuestionId(QuestionID questionID) {
+        return findAll().stream()
+                .filter(question -> question.id().equals(questionID.value()))
+                .findFirst()
+                .orElseThrow()
+                .attachments()
+                .currentItems();
     }
 
     private class QuestionRecentComparator implements Comparator<Question> {
