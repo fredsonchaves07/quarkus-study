@@ -58,4 +58,8 @@ public class Notification extends Entity<NotificationID> {
     public String recipientId() {
         return recipientId;
     }
+
+    public void read() {
+        readAt = LocalDateTime.now();
+    }
 }
